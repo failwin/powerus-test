@@ -16,7 +16,17 @@ export class FlightsService {
 
   async findAll(): Promise<Array<Flight>> {
     const loaders = await this.prepareLoaders();
-    const results = await Promise.allSettled(loaders.map((l) => l.load()));
+    const results = await Promise.all(
+      loaders.map((loader) =>
+        loader
+          .load()
+          .then((value) => ({ status: 'fulfilled', value }))
+          .catch((reason) => ({ status: 'rejected', reason })),
+      ),
+    );
+    // const results = await Promise.allSettled(
+    //   loaders.map((loader) => loader.load()),
+    // );
     const fulfilled = results.filter((res) => res.status === 'fulfilled');
     if (!fulfilled.length) {
       throw new ServiceUnavailableException();
@@ -29,11 +39,11 @@ export class FlightsService {
 
   private async prepareLoaders(): Promise<Array<LoaderService>> {
     const urlsStr = process.env.FLIGHTS_URLS;
-    const timeoutStr = process.env.FLIGHTS_REQUEST_TIMEOUT;
     const urls = urlsStr.split(',');
-    const timeout = parseInt(timeoutStr, 10);
+    const timeout = parseInt(process.env.FLIGHTS_REQUEST_TIMEOUT, 10);
+    const cacheTTL = parseInt(process.env.FLIGHTS_CACHE_TTL, 10);
     return this.loaderFactoryService.createBunch(
-      urls.map((url) => ({ url, timeout })),
+      urls.map((url) => ({ url, timeout, cacheTTL })),
     );
   }
 
