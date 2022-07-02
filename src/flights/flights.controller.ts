@@ -7,12 +7,20 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { FlightsService } from './flights.service';
+import {
+  ApiTags,
+  ApiBody,
+  ApiQuery,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { FlightsService, Flight } from './flights.service';
 
 @Controller('flights')
 export class FlightsController {
   constructor(private readonly flightsService: FlightsService) {}
 
+  @ApiResponse({ type: [Flight] })
   @Get()
   findAll() {
     return this.flightsService.findAll();

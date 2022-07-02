@@ -1,12 +1,6 @@
 import { ModuleRef } from '@nestjs/core';
 import { Injectable } from '@nestjs/common';
-import { LoaderService } from './loader.service';
-
-type CreateOptions =
-  | string
-  | {
-      url: string;
-    };
+import { LoaderService, InitOptions } from './loader.service';
 
 @Injectable()
 export class LoaderFactoryService {
@@ -16,13 +10,14 @@ export class LoaderFactoryService {
     this.moduleRef = moduleRef;
   }
 
-  async create(options: CreateOptions): Promise<LoaderService> {
+  async create(options: InitOptions): Promise<LoaderService> {
     const loader = await this.moduleRef.resolve(LoaderService);
+    loader.init(options);
     return loader;
   }
 
   async createBunch(
-    optionsList: Array<CreateOptions>,
+    optionsList: Array<InitOptions>,
   ): Promise<Array<LoaderService>> {
     return Promise.all(
       optionsList.map((options) => {
