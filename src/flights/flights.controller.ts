@@ -1,19 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiBody,
-  ApiQuery,
-  ApiParam,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { Controller, Get } from '@nestjs/common';
+import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { FlightsService, Flight } from './flights.service';
 
 @ApiTags('flights')

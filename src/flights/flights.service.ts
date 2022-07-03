@@ -38,7 +38,7 @@ export class FlightsService {
   }
 
   private async prepareLoaders(): Promise<Array<LoaderService>> {
-    const urlsStr = process.env.FLIGHTS_URLS;
+    const urlsStr = process.env.FLIGHTS_URLS || '';
     const urls = urlsStr.split(',');
     const timeout = parseInt(process.env.FLIGHTS_REQUEST_TIMEOUT, 10);
     const cacheTTL = parseInt(process.env.FLIGHTS_CACHE_TTL, 10);
