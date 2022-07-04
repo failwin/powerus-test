@@ -1,0 +1,23 @@
+@startuml
+
+FlightsController -> FlightsService: findAll
+
+FlightsService -> LoaderFactoryService: createBunch
+
+LoaderFactoryService -> LoaderFactoryService: init
+LoaderFactoryService -> FlightsService
+
+FlightsService -> LoaderService: load
+FlightsService <- LoaderService
+
+FlightsService -> LoaderService: load
+FlightsService <- LoaderService
+
+FlightsService -> LoaderService: load
+FlightsService <- LoaderService
+
+FlightsService -> FlightsService: merge
+
+FlightsService -> FlightsController
+
+@enduml
